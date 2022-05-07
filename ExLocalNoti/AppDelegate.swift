@@ -6,14 +6,23 @@
 //
 
 import UIKit
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    // Override point for customization after application launch.
+    // alert - 알림이 화면에 노출
+    // sound - 소리
+    // badge - 빨간색 동그라미 숫자
+    UNUserNotificationCenter.current().requestAuthorization(
+      options: [.alert, .sound, .badge],
+      completionHandler: { (granted, error) in
+        print("granted notification, \(granted)")
+      }
+    )
+    
+    UNUserNotificationCenter.current().delegate = self
+    
     return true
   }
 
@@ -34,3 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+extension AppDelegate: UNUserNotificationCenterDelegate {
+  func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+    [.list, .banner, .sound, .badge]
+  }
+}
